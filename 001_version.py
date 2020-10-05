@@ -7,3 +7,5 @@ print(keras.__version__)
 print(cv2.__version__)
 
 import pytesseract
+
+print("import complete")
