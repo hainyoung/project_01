@@ -2,8 +2,7 @@
 
 # 카메라 입력 프레임에서 에지 영상을 구하여 동영상으로 저장하기
 
-import sys
-import cv2
+import sys, cv2
 
 # 카메라로부터 cv2.VideoCapture 객체 생성
 cap = cv2.VideoCapture(0)
