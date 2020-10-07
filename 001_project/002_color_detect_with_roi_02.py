@@ -6,7 +6,7 @@ lower_green = (30, 30, 30)
 upper_green = (70, 255, 255)
 
 # img = mpimg.imread('./test_roi_01.jpg', cv2.IMREAD_COLOR)
-img = mpimg.imread('./001_project/images/onon.jpg', cv2.IMREAD_COLOR)
+img = mpimg.imread('./001_project/data/test.bmp', cv2.IMREAD_COLOR)
 
 img_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 

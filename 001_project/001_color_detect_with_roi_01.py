@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 
-img = cv2.imread("./001_project/images/onon.jpg")
+img = cv2.imread("./001_project/data/onon.jpg")
 cv2.namedWindow('original', cv2.WINDOW_NORMAL)
 # cv2.imshow('original', img)
 
