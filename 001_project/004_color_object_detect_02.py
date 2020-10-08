@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 
-cap = cv2.VideoCapture("./001_project/video.mp4")
+cap = cv2.VideoCapture("./use_video.mp4")
 
 while True:
     ret, frame = cap.read()

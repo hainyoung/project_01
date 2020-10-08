@@ -1,100 +1,150 @@
-import sys
+import pytesseract
 import numpy as np
 import cv2
-import pytesseract
+import pandas as pd
+
 pytesseract.pytesseract.tesseract_cmd = r'C:/Program Files/Tesseract-OCR/tesseract.exe'
 
-cap = cv2.VideoCapture('./use_video.mp4')
+# cap = cv2.VideoCapture("./use_video.mp4")
+cap = cv2.VideoCapture("./night_mode.mp4")
+# cap = cv2.VideoCapture("./night_light.mp4")
+# cap = cv2.VideoCapture("./cut_video.mp4")
+# cap = cv2.VideoCapture("./video_2.mp4")
+
+c = 1
 
 while True:
     ret, frame = cap.read()
 
-    # 1. date_roi
-    date_roi = frame[38:140, 25:490]
-    date_gray = cv2.cvtColor(date_roi, cv2.COLOR_BGR2GRAY)
-    # thresh_date, date_bin = cv2.threshold(date_gray, 50, 255, cv2.THRESH_BINARY)
-    # OTSU
-    thresh_date, date_bin = cv2.threshold(date_gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
-    # print(thresh_date) # 61
-    # blur_date = cv2.medianBlur(date_bin, 1)
-    # blur_date = cv2.resize(blur_date, None, fx = 2, fy = 2, interpolation = cv2.INTER_LINEAR)
-    date = pytesseract.image_to_string(date_bin, config='-c tessedit_char_whitelist=-0123456789 --psm 6 --oem 3')
+    if c % 2 == 0 :
+        cv2.waitKey(1)
 
-    # 2. time_roi    
-    time_roi = frame[38:140, 513:890]
-    time_gray = cv2.cvtColor(time_roi, cv2.COLOR_BGR2GRAY)
-    # thresh_time, time_bin = cv2.threshold(time_gray, 70, 255, cv2.THRESH_BINARY)
-    # OTSU
-    thresh_time, time_bin = cv2.threshold(time_gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
-    # print(thresh_time) # 60
-    # blur_time = cv2.medianBlur(time_bin, 1)
-    # blur_time = cv2.resize(blur_time, None, fx = 2, fy = 2, interpolation = cv2.INTER_LINEAR)
-    time = pytesseract.image_to_string(time_bin, config='-c tessedit_char_whitelist=:0123456789 --psm 6 --oem 3')
+    c += 1
 
-    # 3. speed_roi
-    speed_roi = frame[524:613, 1146:1260]
-    speed_gray = cv2.cvtColor(speed_roi, cv2.COLOR_BGR2GRAY)
-    # thresh_speed, speed_bin = cv2.threshold(speed_gray, 180, 255, cv2.THRESH_BINARY)
-    # OTSU
-    thresh_speed, speed_bin = cv2.threshold(speed_gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
-    # print(thresh_speed) # 170
-    blur_speed = cv2.medianBlur(speed_bin, 1)
-    blur_speed = cv2.resize(blur_speed, None, fx = 2, fy = 2, interpolation = cv2.INTER_LINEAR)
-    speed = pytesseract.image_to_string(speed_bin, config='-c tessedit_char_whitelist=0123456789 --psm 6 --oem 3')
+    # # FIRST ROI : DATE
+    # roi_1 = frame[38:140, 25:490]
+    # gray_1 = cv2.cvtColor(roi_1, cv2.COLOR_BGR2GRAY)
+    # # threshold the image using Otus method to preprocess for tesseract
+    # thresh = cv2.threshold(gray_1, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+    # # perform a median blur to smooth image slightly
+    # blur_1 = cv2.medianBlur(thresh, 3)
+    # # resize image to double the original size as tesseract does better with certain text size
+    # blur_1 = cv2.resize(blur_1, None, fx = 2, fy = 2, interpolation = cv2.INTER_CUBIC)
+    # #recognize the number
+    # text_1 = pytesseract.image_to_string(blur_1, config='-c tessedit_char_whitelist=-0123456789 --psm 6 --oem 3')
+       
 
-    # 4. lane_roi
-    lane_roi = frame[417:476, 1079:1154]
-    # print(lane_roi)
-    # print(type(lane_roi)) # <class 'numpy.ndarray'>
+    # #SECOND ROI : TIME
+    # roi_2 =frame[38:144,513:890]
+    # gray_2 = cv2.cvtColor(roi_2, cv2.COLOR_BGR2GRAY)
+    # # threshold the image using Otsus method to preprocess for tesseract
+    # thresh = cv2.threshold(gray_2, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+    # # perform a median blur to smooth image slightly
+    # blur_2 = cv2.medianBlur(thresh, 3)
+    # # resize image to double the original size as tesseract does better with certain text size
+    # blur_2 = cv2.resize(blur_2, None, fx = 2, fy = 2, interpolation = cv2.INTER_CUBIC)
+    # #recognize the number
+    # text_2 = pytesseract.image_to_string(blur_2, config='-c tessedit_char_whitelist=:0123456789 --psm 13 --oem 3')
+       
 
-    # lane_hsv = cv2.cvtColor(lane_roi, cv2.COLOR_BGR2HSV)
-    # lower_green_lane = np.array([50, 100, 100])
-    # upper_green_lane = np.array([70, 255, 255])
-    # lane_mask = cv2.inRange(lane_hsv, lower_green_lane, upper_green_lane)
-    # lane_frame = cv2.bitwise_and(lane_roi, lane_roi, mask = lane_mask)
+    #THIRD ROI : SPEED
+    roi_3 =frame[524:613,1146:1260]
+    gray_3 = cv2.cvtColor(roi_3, cv2.COLOR_BGR2GRAY)
+    # threshold the image using Otsus method to preprocess for tesseract
+    thresh = cv2.threshold(gray_3, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+    # perform a median blur to smooth image slightly
+    blur_3 = cv2.medianBlur(thresh, 3)
+    # resize image to double the original size as tesseract does better with certain text size
+    blur_3 = cv2.resize(blur_3, None, fx = 2, fy = 2, interpolation = cv2.INTER_CUBIC)
+    #recognize the number
+    text_3 = pytesseract.image_to_string(blur_3, config='-c tessedit_char_whitelist=0123456789 --psm 6 --oem 3')  
+       
 
-    # 5. auto_roi
-    auto_roi = frame[436:491, 1341:1410]
-    auto_roi = cv2.cvtColor(auto_roi, cv2.COLOR_BGR2HSV)
-    lower_green_auto = np.array([50, 100, 100])
-    upper_green_auto = np.array([70, 255, 255])
-    auto_mask = cv2.inRange(auto_roi, lower_green_auto, upper_green_auto)
-    auto_frame = cv2.bitwise_and(auto_roi, auto_roi, mask = auto_mask)
+    #FOURTH ROI : LANE
+    roi_4 = frame[417:476,1079:1154]
+    hsv_1 = cv2.cvtColor(roi_4, cv2.COLOR_BGR2HSV)
+    lower_green = np.array([30, 30, 30])
+    upper_green = np.array([70, 255, 255])
 
-    # avg_color_per_row = np.average(auto_frame, axis = 0)
-    # avg_color = np.average(avg_color_per_row, axis = 0)
-
-    # for i in avg_color:
-    #     if i > 1 :
-    #         print("1")
-    #     else:
-    #         print("0")
+    lower_white = np.array([0,0,128])
+    upper_white = np.array([255,255,255])
 
 
-    # if not ret:
-    #     print('error')
-    #     break
+    mask_green_4 = cv2.inRange(hsv_1, lower_green, upper_green)
+    mask_green_4 = cv2.bitwise_and(roi_4, roi_4, mask = mask_green_4)
 
-    # cv2.imshow('frame', frame)
-    cv2.imshow('date', date_bin)
-    cv2.imshow('time', time_bin)
-    cv2.imshow('speed', speed_bin)
-    cv2.imshow('lane', lane_roi)
-    cv2.imshow('auto', auto_frame)
+    mask_white_4 = cv2.inRange(hsv_1, lower_white, upper_white)
+    mask_white_4 = cv2.bitwise_and(roi_4, roi_4, mask = mask_white_4)
 
-    cv2.moveWindow('date', 0, 0)
-    cv2.moveWindow('time', 0, 100)
-    cv2.moveWindow('speed', 0, 200)
-    cv2.moveWindow('lane', 0, 300)
-    cv2.moveWindow('auto', 0, 400)
+    # avg_roi_4_per_row = np.average(mask_roi_4, axis = 0)
+    # avg_roi_4 = np.average(avg_roi_4_per_row, axis = 0)
+    # avg_lane = np.average(avg_roi_4)
 
-    # sys.stdout = open('output.txt', 'a', -1, "utf-8")
-    print(date, time, speed, end = '')  
+    # print(avg_lane)
 
-    # k = cv2.waitKey(1) & 0xFF
-    if cv2.waitKey(33) > 0:
-        break
+    # if avg_lane > 1 :
+    #     print("1")
+    # else :
+    #     print("0")
+   
+   
+    #FIFTH ROI : AUTO
+    roi_5 = frame[436:491,1341:1410]
+    hsv_2 = cv2.cvtColor(roi_5, cv2.COLOR_BGR2HSV)
+    lower_green = np.array([30, 30, 30])
+    upper_green = np.array([70, 255, 255])
+
+
+    lower_white = np.array([0,0,128])
+    upper_white = np.array([255,255,255])
+
+    mask_green_5 = cv2.inRange(hsv_2, lower_green, upper_green)
+    mask_green_5 = cv2.bitwise_and(roi_5, roi_5, mask = mask_green_5)
+
+    mask_white_5 = cv2.inRange(hsv_2, lower_white, upper_white)
+    mask_white_5 = cv2.bitwise_and(roi_5, roi_5, mask = mask_white_5)
+
+    # print(mask_roi_5.shape) # (55, 69, 3)
+    # print(mask_roi_5)
+    # avg_roi_5_per_row = np.average(mask_green_5, axis = 0) # standard : row
+    # print(avg_roi_5_per_row)
+    # print(avg_roi_5_per_row.shape) # (69, 3)
+    # avg_roi_5 = np.average(avg_roi_5_per_row, axis = 0)
+    # print(avg_roi_5.shape) # (3,)
+    # print(avg_roi_5) 
+
+
+    # avg_auto = np.average(avg_roi_5)
+    # print(avg_auto)
+
+    # if avg_auto > 1 :
+    #     print("1")
+    # else :
+    #     print("0")
+
+
+    #show all the windows
+    cv2.imshow("Frame", frame)
+    # cv2.imshow("blur_1",blur_1)
+    # cv2.imshow("blur_2",blur_2)
+    cv2.imshow("blur_3",blur_3)
+    cv2.imshow("mask_white_4", mask_white_4)
+    cv2.imshow("mask_green_4", mask_green_4)
+    cv2.imshow("mask_white_5", mask_white_5)
+    cv2.imshow("mask_green_5", mask_green_5)
+    # cv2.imshow("mask_roi_5", mask_roi_5)
+    cv2.moveWindow("Frame",0,0)
+    # cv2.moveWindow('blur_1', 0,0)
+    # cv2.moveWindow('blur_2', 0,240)
+    cv2.moveWindow('blur_3', 0,500)        
+    cv2.moveWindow('mask_white_4', 0,730)
+    cv2.moveWindow('mask_green_4', 150,730)
+    cv2.moveWindow('mask_white_5', 0,830)
+    cv2.moveWindow('mask_green_5', 150,830)
+    # cv2.moveWindow('mask_roi_5', 0,930)
+
+    #print the results
+    # print(f'\r{text_1}{text_2}{text_3}', end = '')  
+
 
 cap.release()
-cv2.destroyAllWindows()
-
