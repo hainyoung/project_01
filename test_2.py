@@ -56,17 +56,19 @@ while(cap.isOpened()):
     # FIRST ROI : DATE
     roi_1 = frame[38:140, 25:490]
     blur_1 = converter(roi_1)
-    # text_1 = pytesseract.image_to_string(blur_1, config='-c tessedit_char_whitelist=-:0123456789 --psm 13 --oem 3')
-
+    text_1 = pytesseract.image_to_string(blur_1, config='-c tessedit_char_whitelist=-:0123456789 --psm 13 --oem 3')
+    text_1 = text_1.strip()
     # SECOND ROI : TIME
     roi_2 =frame[38:144,513:890]
     blur_2 = converter(roi_2)
-    # text_2 = pytesseract.image_to_string(blur_2, config='-c tessedit_char_whitelist=:0123456789 --psm 13 --oem 3')
+    text_2 = pytesseract.image_to_string(blur_2, config='-c tessedit_char_whitelist=:0123456789 --psm 13 --oem 3')
+    text_2 = text_2.strip()
     
     # THIRD ROI : SPEED
     roi_3 =frame[524:613,1146:1260]
     blur_3= converter(roi_3)
     text_3 = pytesseract.image_to_string(blur_3, config='-c tessedit_char_whitelist=0123456789 --psm 6 --oem 3')
+    text_3 = text_3.strip()
 
     # # FOURTH ROI : LANE
     roi_4 = frame[417:476,1079:1154]
@@ -102,58 +104,42 @@ while(cap.isOpened()):
     # print(avg_green_auto)
 
     #Show all the windows
-    cv2.imshow("Frame", frame)
+    # cv2.imshow("Frame", frame)
     # cv2.imshow("blur_1",blur_1)
     # cv2.imshow("blur_2",blur_2)
-    cv2.imshow("blur_3",blur_3)
-    cv2.imshow("hsv_green_lane", hsv_white_lane)
-    cv2.imshow("hsv_white_lane", hsv_green_lane)
-    cv2.imshow("hsv_green_auto", hsv_white_auto)
-    cv2.imshow("hsv_white_auto", hsv_green_auto)
+    # cv2.imshow("blur_3",blur_3)
+    # cv2.imshow("hsv_green_lane", hsv_white_lane)
+    # cv2.imshow("hsv_white_lane", hsv_green_lane)
+    # cv2.imshow("hsv_green_auto", hsv_white_auto)
+    # cv2.imshow("hsv_white_auto", hsv_green_auto)
     
-    cv2.moveWindow("Frame", 0,0)
+    # cv2.moveWindow("Frame", 0,0)
     # cv2.moveWindow('blur_1', 0,0)
     # cv2.moveWindow('blur_2', 0,250)
-    cv2.moveWindow('blur_3', 0,500)        
-    cv2.moveWindow('hsv_green_lane', 0,700)
-    cv2.moveWindow('hsv_white_lane', 150,700)
-    cv2.moveWindow('hsv_green_auto', 0,900)
-    cv2.moveWindow('hsv_white_auto', 150,900)
+    # cv2.moveWindow('blur_3', 0,500)        
+    # cv2.moveWindow('hsv_green_lane', 0,700)
+    # cv2.moveWindow('hsv_white_lane', 150,700)
+    # cv2.moveWindow('hsv_green_auto', 0,900)
+    # cv2.moveWindow('hsv_white_auto', 150,900)
     
 
-    # sys.stdout = open('output.txt', 'a', -1, 'utf-8')
+    sys.stdout = open('output_1012.txt', 'a', -1, 'utf-8')
     # print the results
-    # print(f'\r{text_1}{text_2}{text_3}', end = '')  
-    print(f'\r{text_3}', end = '')
+    print(text_1, text_2, text_3, end = ',', sep = ',')
     
-    # print(text_1)
-    # print(text_2)
-
-    # if text_3.isalpha() == False:
-    #     print("Null")
-    # else :
-    #     print(text_3)
-
-    # print(text_3)
-    # print(type(text_3))
-    # if len(text_3) == 0 :
-    #     print("Null")
-    # else:
-    #     print(text_3)
-
     # lane
     # print("average : lane")
     if avg_green_lane > 0 :
-        print("avg_lane : 1")
+        print("1", end = ',', sep = ',')
     else : 
-        print("avg_lane : 0")
+        print("0", end = ',', sep = ',')
 
     # auto
     # print("average : auto")
     if avg_green_auto > 0 :
-        print("avg_auto : 1")
+        print("1")
     else :
-        print("avg_auto : 0")
+        print("0")
 
     if(cv2.waitKey(1) & 0xFF == ord('q')):
         break
