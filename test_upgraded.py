@@ -28,8 +28,14 @@ cap = cv2.VideoCapture("./night_light.mp4")
 # fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 # out = cv2.VideoWriter('output.avi', fourcc, 30.0, (1920,1080))
 
+c = 1
+
 while(cap.isOpened()):
     ret, frame = cap.read()
+
+    if c % 30 == 0:
+        cv2.waitKey(1)
+    c += 1
 
     # if(ret==True)
 

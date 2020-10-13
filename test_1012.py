@@ -11,8 +11,7 @@ cap = cv2.VideoCapture("./use_video.mp4")
 # cap = cv2.VideoCapture("./cut_video.mp4")
 # cap = cv2.VideoCapture("./video_2.mp4")
 
-# Functions 
-# convert to BGR2GRAY and apply threshold for Binarization 
+#Functions 
 def converter(roi):
     # roi_h = roi.shape[0]
     # roi_w = roi.shape[1]
@@ -25,9 +24,9 @@ def converter(roi):
     blur = cv2.medianBlur(thresh, 3)
     # resize image to double the original size as tesseract does better with certain text size
     blur = cv2.resize(blur, None, fx = 4, fy = 4, interpolation = cv2.INTER_CUBIC)
+    # run tesseract and convert image text to string
     return blur
 
-# using HSV
 def hsv_green(roi):
     hsv = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
     lower_green = np.array([30, 30, 90])
@@ -54,13 +53,10 @@ while(cap.isOpened()):
         break
     
     # FIRST ROI : DATE
-    roi_1 = frame[38:140, 25:490] # frame[ymin:ymax, xmin:xmax] <- xml file(using labelImg Tool)
+    roi_1 = frame[38:140, 25:490]
     blur_1 = converter(roi_1)
-    # run tesseract and convert image text to string
     text_1 = pytesseract.image_to_string(blur_1, config='-c tessedit_char_whitelist=-:0123456789 --psm 13 --oem 3')
-    # remove any leading(spaces at the beginning) and trailing(spaces at the end) characters
     text_1 = text_1.strip()
-
     # SECOND ROI : TIME
     roi_2 =frame[38:144,513:890]
     blur_2 = converter(roi_2)
@@ -85,7 +81,6 @@ while(cap.isOpened()):
     hsv_white_lane_per_row = np.average(hsv_white_lane, axis = 0)
     avg_white_lane_ = np.average(hsv_white_lane_per_row, axis = 0)
     avg_white_lane = np.average(avg_white_lane_)
-
     # print(avg_white_lane)
     # print(avg_green_lane)
 
@@ -107,7 +102,7 @@ while(cap.isOpened()):
     # print("green average")
     # print(avg_green_auto)
 
-    # Show all the windows
+    #Show all the windows
     # cv2.imshow("Frame", frame)
     # cv2.imshow("blur_1",blur_1)
     # cv2.imshow("blur_2",blur_2)
@@ -126,9 +121,8 @@ while(cap.isOpened()):
     # cv2.moveWindow('hsv_green_auto', 0,900)
     # cv2.moveWindow('hsv_white_auto', 150,900)
     
-    # save the results as txt
-    sys.stdout = open('output_1012.txt', 'a', -1, 'utf-8')
 
+    sys.stdout = open('output_1012.txt', 'a', -1, 'utf-8')
     # print the results
     print(text_1, text_2, text_3, end = ',', sep = ',')
     
@@ -148,7 +142,6 @@ while(cap.isOpened()):
 
     if(cv2.waitKey(1) & 0xFF == ord('q')):
         break
-
 
 
 cap.release()
