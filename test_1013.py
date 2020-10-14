@@ -3,12 +3,13 @@ import numpy as np
 import cv2
 import pandas as pd
 import sys
+import time
 
-
+start = time.time()
 # cap = cv2.VideoCapture("./use_video.mp4")
-# cap = cv2.VideoCapture("./night_mode.mp4")
+cap = cv2.VideoCapture("./night_mode.mp4")
 # cap = cv2.VideoCapture("./night_light.mp4")
-cap = cv2.VideoCapture("./cut_video.mp4")
+# cap = cv2.VideoCapture("./cut_video.mp4")
 # cap = cv2.VideoCapture("./video_2.mp4")
 # cap = cv2.VideoCapture("./1min.mp4")
 
@@ -24,7 +25,7 @@ def converter(roi):
     # perform a median blur to smooth image slightly
     blur = cv2.medianBlur(thresh, 3)
     # resize image to double the original size as tesseract does better with certain text size
-    blur = cv2.resize(blur, None, fx = 4, fy = 4, interpolation = cv2.INTER_CUBIC)
+    blur = cv2.resize(blur, None, fx = 2, fy = 2, interpolation = cv2.INTER_CUBIC)
     # run tesseract and convert image text to string
     return blur
 
@@ -53,22 +54,24 @@ while True:
     if not ret:
         break
 
-    if c % 10 == 0:
+    if c % 10  == 0:
         # cv2.waitKey(1)
 
     
-    # # FIRST ROI : DATE
-    # roi_1 = frame[38:140, 25:490]
-    # blur_1 = converter(roi_1)
-    # text_1 = pytesseract.image_to_string(blur_1, config='-c tessedit_char_whitelist=-:0123456789 --psm 13 --oem 3')
-    # text_1 = text_1.strip()
-    # # SECOND ROI : TIME
-    # roi_2 =frame[38:144,513:890]
-    # blur_2 = converter(roi_2)
-    # text_2 = pytesseract.image_to_string(blur_2, config='-c tessedit_char_whitelist=:0123456789 --psm 13 --oem 3')
-    # text_2 = text_2.strip()
+        # # FIRST ROI : DATE
+        # roi_1 = frame[38:140, 25:490]
+        # blur_1 = converter(roi_1)
+        # text_1 = pytesseract.image_to_string(blur_1, config='-c tessedit_char_whitelist=-:0123456789 --psm 13 --oem 3')
+        # text_1 = text_1.strip()
+
+        # SECOND ROI : TIME
+        # roi_2 =frame[38:144,513:890]
+        # roi_2 =frame[51:131,513:890]
+        # blur_2 = converter(roi_2)
+        # text_2 = pytesseract.image_to_string(blur_2, config='-c tessedit_char_whitelist=:0123456789 --psm 13 --oem 3')
+        # text_2 = text_2.strip()
     
-        # DATE&TIME COMBINED ROI 
+        # # DATE&TIME COMBINED ROI 
         date_time =frame[51:131,28:873]
         date_time = converter(date_time)
         text_date_time = pytesseract.image_to_string(date_time, config='-c tessedit_char_whitelist=-:0123456789 --psm 13 --oem 1')
@@ -89,10 +92,13 @@ while True:
         hsv_green_lane_per_row = np.average(hsv_green_lane, axis = 0)
         avg_green_lane_ = np.average(hsv_green_lane_per_row, axis = 0)
         avg_green_lane = np.average(avg_green_lane_)
+        avg_green_lane = round(avg_green_lane, 4)
 
         hsv_white_lane_per_row = np.average(hsv_white_lane, axis = 0)
         avg_white_lane_ = np.average(hsv_white_lane_per_row, axis = 0)
         avg_white_lane = np.average(avg_white_lane_)
+        avg_white_lane = round(avg_white_lane, 4)
+
         # print(avg_white_lane)
         # print(avg_green_lane)
 
@@ -104,10 +110,12 @@ while True:
         hsv_green_auto_per_row = np.average(hsv_green_auto, axis = 0)
         avg_green_auto_ = np.average(hsv_green_auto_per_row, axis = 0)
         avg_green_auto = np.average(avg_green_auto_)
+        avg_green_auto = round(avg_green_auto, 4)
 
         hsv_white_auto_per_row = np.average(hsv_white_auto, axis = 0)
         avg_white_auto_ = np.average(hsv_white_auto_per_row, axis = 0)
         avg_white_auto = np.average(avg_white_auto_)
+        avg_white_auto = round(avg_white_auto, 4)
 
         # print("white average")
         # print(avg_white_auto)
@@ -118,25 +126,24 @@ while True:
         cv2.imshow("Frame", frame)
         # cv2.imshow("blur_1",blur_1)
         # cv2.imshow("blur_2",blur_2)
-        # cv2.imshow("date_time",date_time)
-        # cv2.imshow("speed",blur_3)
-        # cv2.imshow("hsv_green_lane", hsv_white_lane)
-        # cv2.imshow("hsv_white_lane", hsv_green_lane)
-        # cv2.imshow("hsv_green_auto", hsv_white_auto)
-        # cv2.imshow("hsv_white_auto", hsv_green_auto)
+        cv2.imshow("date_time",date_time)
+        cv2.imshow("speed",blur_3)
+        cv2.imshow("hsv_green_lane", hsv_white_lane)
+        cv2.imshow("hsv_white_lane", hsv_green_lane)
+        cv2.imshow("hsv_green_auto", hsv_white_auto)
+        cv2.imshow("hsv_white_auto", hsv_green_auto)
         
         cv2.moveWindow("Frame", 0,0)
         # cv2.moveWindow('blur_1', 0,0)
         # cv2.moveWindow('blur_2', 0,250)
-        # cv2.moveWindow('date_time', 0,250)
-        # cv2.moveWindow('speed', 0,500)        
-        # cv2.moveWindow('hsv_green_lane', 0,700)
-        # cv2.moveWindow('hsv_white_lane', 150,700)
-        # cv2.moveWindow('hsv_green_auto', 0,900)
-        # cv2.moveWindow('hsv_white_auto', 150,900)
+        cv2.moveWindow('date_time', 0,250)
+        cv2.moveWindow('speed', 0,500)        
+        cv2.moveWindow('hsv_green_lane', 0,700)
+        cv2.moveWindow('hsv_white_lane', 150,700)
+        cv2.moveWindow('hsv_green_auto', 0,900)
+        cv2.moveWindow('hsv_white_auto', 150,900)
         
-
-        sys.stdout = open('output_cut_video_3frame.txt', 'a', -1, 'utf-8')
+        # sys.stdout = open('output_cut_video_3frame_datetime.txt', 'a', -1, 'utf-8')
         # print the results
         print(text_date_time, text_3, end = ',', sep = ',')
         
@@ -146,19 +153,21 @@ while True:
             print("1", end = ',', sep = ',')
         else : 
             print("0", end = ',', sep = ',')
+            # print("0", end = ',', sep = ',')
 
         # auto
         # print("average : auto")
-        if avg_green_auto > 0 :
-            print("1", end = ',', sep = ',')
+        if avg_green_auto > 0 or avg_white_auto > 0 :
+            print("1")
         else :
-            print("0", end = ',', sep = ',')
+            print("0")
+            # print("0", end = ',', sep = ',')
 
         # avg_lane & avg_auto
-        print(avg_white_lane, end = ',', sep = ',')
-        print(avg_green_lane, end = ',', sep = ',')
-        print(avg_white_auto, end = ',', sep = ',')
-        print(avg_green_auto)
+        # print(avg_white_lane, end = ',', sep = ',')
+        # print(avg_green_lane, end = ',', sep = ',')
+        # print(avg_white_auto, end = ',', sep = ',')
+        # print(avg_green_auto)
 
         if(cv2.waitKey(1) & 0xFF == ord('q')):
             break
@@ -170,3 +179,11 @@ cap.release()
 # out.release()
 cv2.destroyAllWindows()
 
+# print("time :", time.time() - start)
+
+
+# output_cut_video_3frame.txt : time : 4538.550533294678 
+# -> 1"15"38 / time, speed, lane, auto, lane_white_avg, lane_green_avg, auto_white_avg, auto_green_avg
+
+# output_cut_video_3frame_datetime.txt : time : 5289.195523023605
+# -> 1"28"09 / date_time, speed, lane, auto, lane_white_avg, lane_green_avg, auto_white_avg, auto_green_avg
