@@ -5,12 +5,11 @@ import pandas as pd
 
 # pytesseract.pytesseract.tesseract_cmd = r'C:/Program Files/Tesseract-OCR/tesseract.exe'
 
-# cap = cv2.VideoCapture("./use_video.mp4")
+#cap = cv2.VideoCapture("./use_video.mp4")
 # cap = cv2.VideoCapture("./night_mode.mp4")
-# cap = cv2.VideoCapture("./night_light.mp4")
-# cap = cv2.VideoCapture("./cut_video.mp4")
+cap = cv2.VideoCapture("./night_light.mp4")
+#cap = cv2.VideoCapture("./cut_video.mp4")
 # cap = cv2.VideoCapture("./video_2.mp4")
-# cap = cv2.VideoCapture("./A01_20201006104159.avi")
 
 # fourcc = cv2.VideoWriter_fourcc(*'mp4v') # codec information
 # out = cv2.VideoWriter('output.mp4', fourcc, 30.0, (1920,1080))
@@ -29,14 +28,8 @@ import pandas as pd
 # fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 # out = cv2.VideoWriter('output.avi', fourcc, 30.0, (1920,1080))
 
-c = 1
-
 while(cap.isOpened()):
     ret, frame = cap.read()
-
-    if c % 30 == 0:
-        cv2.waitKey(1)
-    c += 1
 
     # if(ret==True)
 
