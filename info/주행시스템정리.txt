@@ -1,0 +1,15 @@
+LKA : 차선 이탈 방지 보조(Land Keepipng Assist) 
+- 보통 60 ~ 150km/h 사이에서 작동
+LFA : 차로 중앙 유지 보조(Lane Following Assist)
+- 보통 0 ~ 150km/h 사이에서 작동
+- LKA와 달리 전방 카메라가 차선만 잘 인식하면 속도 상관없이 작동
+- 0 ~ 150 사이에서 항상 작동
+
+그랜저ig는 현재 LKAS, HDA, ACC 지원
+
+CRUISE ON 
+-> 앞차 속도 맞춰 조절 운행
+-> 액셀 밟지 않아도 된다
+-> 고속도로 주행시에는 CRUIS 에서 HDA로 표기가 바뀐다
+
+HDA : Highway Driving Assist 
