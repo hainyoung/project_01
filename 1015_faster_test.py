@@ -21,7 +21,7 @@ import sys
 # cap = cv2.VideoCapture("./1015_video_list/dim_10_16frame.mp4") # 15.99
 # cap = cv2.VideoCapture("./1015_video_list/dim_10_20frame.mp4") # 19.85
 # cap = cv2.VideoCapture("./1015_video_list/dim_10_22frame.mp4") # 22.00
-# cap = cv2.VideoCapture("./1015_video_list/dim_10_fullframe.mp4") # 30.00
+cap = cv2.VideoCapture("./1015_video_list/dim_10_fullframe.mp4") # 30.00
 # cap = cv2.VideoCapture("./1015_video_list/indoor_10_22frame.mp4") # 21.99
 # cap = cv2.VideoCapture("./1015_video_list/indoor_12_22frame.mp4") # 21.99
 # cap = cv2.VideoCapture("./1015_video_list/indoor_15_22frame.mp4") # 21.99
@@ -30,7 +30,7 @@ import sys
 # cap = cv2.VideoCapture("./1015_video_list/outdoor_12_22frame.mp4") # 22.00
 # cap = cv2.VideoCapture("./1015_video_list/outdoor_12_brightness_max_22frame.mp4") # 22.00
 # cap = cv2.VideoCapture("./1015_video_list/outdoor_12_saturation_max_22frame.mp4") # 22.00
-cap = cv2.VideoCapture("./1015_video_list/standard_15_22frame.mp4") # 22.00
+# cap = cv2.VideoCapture("./1015_video_list/standard_15_22frame.mp4") # 22.00
 
 
 
@@ -85,7 +85,7 @@ while(cap.isOpened()):
     if not ret:
         break
     
-    if c % 7 == 0:
+    if c % 10 == 0:
 
         # # FIRST ROI : DATE
         # roi_1 = frame[38:140, 25:490]
