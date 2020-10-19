@@ -41,9 +41,6 @@ for cnt in contours:
             cv2.putText(out,string,(x,y+h),0,1,(0,255,0))
 
 
-
-
-
 cv2.imshow('im',im)
 cv2.imshow('out',out)
 

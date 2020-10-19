@@ -53,7 +53,7 @@ import sys
 import numpy as np
 import cv2
 
-im = cv2.imread('./213-tile-copy.jpg')
+im = cv2.imread('./date_time_imgs.png')
 im3 = im.copy()
 
 gray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
@@ -86,9 +86,10 @@ for cnt in contours:
                 sample = roismall.reshape((1,100))
                 samples = np.append(samples,sample,0)
 
+
 responses = np.array(responses,np.float32)
 responses = responses.reshape((responses.size,1))
 print("training complete")
 
-np.savetxt('generalsamples.data',samples)
-np.savetxt('generalresponses.data',responses)
+np.savetxt('./etc/date_time_generalsamples.data',samples)
+np.savetxt('./etc/date_time_generalresponses.data',responses)
