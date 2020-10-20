@@ -98,8 +98,8 @@ while(cap.isOpened()):
         
 
         # DATE and TIME 
-        samples_dt = np.loadtxt('./date_time_generalsamples.data', np.float32)
-        responses_dt = np.loadtxt('./date_time_generalresponses.data', np.float32)
+        samples_dt = np.loadtxt('./z_test/date_time_generalsamples.data', np.float32)
+        responses_dt = np.loadtxt('./z_test/date_time_generalresponses.data', np.float32)
         responses_dt = responses_dt.reshape((responses_dt.size, 1))
         model_dt = cv2.ml.KNearest_create()
         model_dt.train(samples_dt, cv2.ml.ROW_SAMPLE, responses_dt)
@@ -129,7 +129,7 @@ while(cap.isOpened()):
                     string_dt = str(int((results[0][0])))
                     # string_dt = str((results[0][0]))
                     cv2.putText(out_dt,string_dt,(x,y+h),0,1,(0,255,0))
-                    print(string_dt)
+                    print(string_dt, end = '')
 
 
 
