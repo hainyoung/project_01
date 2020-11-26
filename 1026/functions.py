@@ -42,10 +42,43 @@ def draw_rec(frame,name,x,y,h,w):
     return rec
 
 
+def date_time_recognizer(image,x,y,h,w):
+        samples_dt = np.loadtxt('./date_time_model/date_time_generalsamples.data', np.float32)
+        responses_dt = np.loadtxt('./date_time_model/date_time_generalresponses.data', np.float32)
+        responses_dt = responses_dt.reshape((responses_dt.size, 1))
+        model_dt = cv2.ml.KNearest_create()
+        model_dt.train(samples_dt, cv2.ml.ROW_SAMPLE, responses_dt)
+        roi_dt = image[y:y+h, x:x+w]
+        out_dt = np.zeros(roi_dt.shape,np.uint8)
+        gray_dt = cv2.cvtColor(roi_dt,cv2.COLOR_BGR2GRAY)
+        blur_dt = cv2.GaussianBlur(gray_dt,(5,5),0)
+        _, thresh_dt = cv2.threshold(blur_dt, 127,255, cv2.THRESH_OTSU)
+        contours_dt,hierarchy_dt = cv2.findContours(thresh_dt,cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)
+        dt = []
+        for cnt_dt in contours_dt:
+            if cv2.contourArea(cnt_dt)>300:
+                #x, y, w, h = 28, 51, 873-28, 131-51
+                [x, y, w, h] = cv2.boundingRect(cnt_dt)
+                if  h>32:
+                    cv2.rectangle(roi_dt,(x,y),(x+w,y+h),(0,255,0),2)
+                    roi_date = thresh_dt[y:y+h,x:x+w]
+                    roismall = cv2.resize(roi_date,(10,10))
+                    roismall = roismall.reshape((1,100))
+                    roismall = np.float32(roismall)
+                    # for each in roismall:
+                    retval, results, neigh_resp, dists = model_dt.findNearest(roismall, k = 1)
+                    string_dt= str(int((results[0][0])))
+                    # string_dt = str((results[0][0]))
+                    cv2.putText(out_dt,string_dt,(x,y+h),0,1,(0,255,0))
+                    # print(string_dt)
+                    dt.append(string_dt)
+        return dt                     
+
+
 
 def speed_digit_recognizer(image,x,y,h,w):
 	    #     #######   training part    ############### 
-	    
+
 	    # BINARY MODEL
         # samples_speed = np.loadtxt('./speed_generalsamples.data',np.float32)
         # responses_speed = np.loadtxt('./speed_generalresponses.data',np.float32)
@@ -55,8 +88,11 @@ def speed_digit_recognizer(image,x,y,h,w):
         # responses_speed = np.loadtxt('./models_OTSU/generalresponses.data',np.float32)
         
         # # #OTSU MODEL_newimage
-        samples_speed = np.loadtxt('./speed_model/finding_44/44_generalsamples.data',np.float32)
-        responses_speed = np.loadtxt('./speed_model/finding_44/44_generalresponses.data',np.float32)
+        samples_speed = np.loadtxt('./problem_solved/models_OTSU_newimage/generalsamples.data',np.float32)
+        responses_speed = np.loadtxt('./problem_solved/models_OTSU_newimage/generalresponses.data',np.float32)
+
+        # samples_speed = np.loadtxt('./problem_solved/19_model/speed_generalsamples.data',np.float32)
+        # responses_speed = np.loadtxt('./problem_solved/19_model/speed_generalresponses.data',np.float32)
 
 
         responses_speed = responses_speed.reshape((responses_speed.size,1))
@@ -129,12 +165,12 @@ def mask_speed_digit_recognizer(image,x,y,h,w):
         for cnt_speed in contours_speed:
             if cv2.contourArea(cnt_speed) < 800:           
                 [x, y, w, h] = cv2.boundingRect(cnt_speed)
-                if  h>29:
+                if  h>25:
                     cv2.rectangle(roi_speed,(x,y),(x+w,y+h),(0,255,0),2)
                     roi_sp = mask_white[y:y+h,x:x+w]
-                    roismall = cv2.resize(roi_sp,(10,10))
-                    roismall = roismall.reshape((1,100))
-                    roismall = np.float32(roismall)
+                    roismall_resize = cv2.resize(roi_sp,(10,10))
+                    roismall_reshape = roismall_resize.reshape((1,100))
+                    roismall = np.float32(roismall_reshape)
                     # for each in roismall:
                     retval, results, neigh_resp, dists = model.findNearest(roismall, k = 1)
                     string_speed= str(int((results[0][0])))
@@ -145,37 +181,6 @@ def mask_speed_digit_recognizer(image,x,y,h,w):
         return speed
 
 
-def date_time_recognizer(image,x,y,h,w):
-        samples_dt = np.loadtxt('./date_time_model/date_time_generalsamples.data', np.float32)
-        responses_dt = np.loadtxt('./date_time_model/date_time_generalresponses.data', np.float32)
-        responses_dt = responses_dt.reshape((responses_dt.size, 1))
-        model_dt = cv2.ml.KNearest_create()
-        model_dt.train(samples_dt, cv2.ml.ROW_SAMPLE, responses_dt)
-        roi_dt = image[y:y+h, x:x+w]
-        out_dt = np.zeros(roi_dt.shape,np.uint8)
-        gray_dt = cv2.cvtColor(roi_dt,cv2.COLOR_BGR2GRAY)
-        blur_dt = cv2.GaussianBlur(gray_dt,(5,5),0)
-        _, thresh_dt = cv2.threshold(blur_dt, 127,255, cv2.THRESH_OTSU)
-        contours_dt,hierarchy_dt = cv2.findContours(thresh_dt,cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)
-        dt = []
-        for cnt_dt in contours_dt:
-            if cv2.contourArea(cnt_dt)>300:
-                #x, y, w, h = 28, 51, 873-28, 131-51
-                [x, y, w, h] = cv2.boundingRect(cnt_dt)
-                if  h>32:
-                    cv2.rectangle(roi_dt,(x,y),(x+w,y+h),(0,255,0),2)
-                    roi_date = thresh_dt[y:y+h,x:x+w]
-                    roismall = cv2.resize(roi_date,(10,10))
-                    roismall = roismall.reshape((1,100))
-                    roismall = np.float32(roismall)
-                    # for each in roismall:
-                    retval, results, neigh_resp, dists = model_dt.findNearest(roismall, k = 1)
-                    string_dt= str(int((results[0][0])))
-                    # string_dt = str((results[0][0]))
-                    cv2.putText(out_dt,string_dt,(x,y+h),0,1,(0,255,0))
-                    # print(string_dt)
-                    dt.append(string_dt)
-        return dt                     
 
                 
  

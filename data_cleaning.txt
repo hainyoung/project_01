@@ -1,0 +1,24 @@
+project 01 : Autonomous Driving
+
+after recording driving videos
+
+Data Extraction
+1) from dashboard video : Date, Time, lkas, ldws
+2) from front video : Distance
+3) from Log files(Application) : Longtitude, Latitude
+
+after extraction data
+1) dashboard data, distance data -> check the nulls and remove the duplicates
+if it has the nulls -> fill with "interpolate"
+if it has the duplicates, remove
+
+2) merge data
+dashboard + distance -> according to time
+
+3) merged data(dashboard + distance) + location data(longtitude, latitude)
+inner? right?
+
+if location data has the nulls..?
+bfill or ffill or interpolate???
+
+4) make a final output data

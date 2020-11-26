@@ -3,8 +3,7 @@ import sys
 import numpy as np
 import cv2
 
-im = cv2.imread('./1019_X/speed_img.jpg')
-
+im = cv2.imread('resized_213.png')
 #im3 = im.copy()
 
 gray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
@@ -41,5 +40,5 @@ responses = np.array(responses,np.float32)
 responses = responses.reshape((responses.size,1))
 print("training complete")
 
-np.savetxt('./speed_generalsamples.data',samples)
-np.savetxt('./speed_generalresponses.data',responses)
+np.savetxt('generalsamples.data',samples)
+np.savetxt('generalresponses.data',responses)

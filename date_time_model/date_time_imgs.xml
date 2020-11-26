@@ -1,0 +1,26 @@
+<annotation>
+	<folder>speed_img_connect</folder>
+	<filename>date_time_imgs.png</filename>
+	<path>\\192.168.0.20\kbits\01.회사관리\98.직원간교류파일\00.하인영\speed_img_connect\date_time_imgs.png</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>336</width>
+		<height>260</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>fake_zero</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>109</xmin>
+			<ymin>169</ymin>
+			<xmax>128</xmax>
+			<ymax>198</ymax>
+		</bndbox>
+	</object>
+</annotation>

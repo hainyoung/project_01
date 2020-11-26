@@ -1,17 +1,19 @@
 import sys
-
 import numpy as np
 import cv2
 
-im = cv2.imread('./1019_X/speed_img.jpg')
-
-#im3 = im.copy()
+# im = cv2.imread('H:/hainyoung/project/date_time_imgs.jpg')
+im = cv2.imread('H:/hainyoung/project/date_time_imgs.png')
+# im3 = im.copy()
 
 gray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
 blur = cv2.GaussianBlur(gray,(5,5),0)
+
 # thresh = cv2.adaptiveThreshold(blur,255,1,1,11,2)
 
-_, thresh = cv2.threshold(blur, 127,255, cv2.THRESH_BINARY)
+# _, thresh = cv2.threshold(blur, 127,255, cv2.THRESH_BINARY)
+
+_, thresh = cv2.threshold(blur, 0, 255, cv2.THRESH_OTSU)
 
 contours,hierarchy = cv2.findContours(thresh,cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)
 
@@ -20,10 +22,11 @@ responses = []
 keys = [i for i in range(48,58)]
 
 for cnt in contours:
-    if cv2.contourArea(cnt)>50:
+    if cv2.contourArea(cnt)>300:
+
         [x,y,w,h] = cv2.boundingRect(cnt)
 
-        if  h>28:
+        if  h>32:
             cv2.rectangle(im,(x,y),(x+w,y+h),(0,0,255),2)
             roi = thresh[y:y+h,x:x+w]
             roismall = cv2.resize(roi,(10,10))
@@ -41,5 +44,6 @@ responses = np.array(responses,np.float32)
 responses = responses.reshape((responses.size,1))
 print("training complete")
 
-np.savetxt('./speed_generalsamples.data',samples)
-np.savetxt('./speed_generalresponses.data',responses)
+np.savetxt('./date_time_generalsamples.data',samples)
+np.savetxt('./date_time_generalresponses.data',responses)
+
